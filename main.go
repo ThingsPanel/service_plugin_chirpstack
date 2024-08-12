@@ -18,6 +18,8 @@ func main() {
 	LogInIt()
 	log.Println("Starting the application...")
 
+	//total, list, err := apis.NewClient("104.156.140.42:8080", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNzIjoiY2hpcnBzdGFjayIsInN1YiI6IjE2Y2M0MTYzLTdjZTQtNDFjMi04NjE0LTQ0MGM0Njc2YWFiYiIsInR5cCI6ImtleSJ9.nadjUeNG699UdKKf2RZ9rajf3__Gjb1Xncfv9NyJ_uM", "ddf6181c-efc4-4ad5-bf41-24b2262d53aa").GetDeviceList(context.Background(), 10, 0)
+	//log.Println(total, list, err)
 	//初始化redis
 	cache.RedisInit()
 	// 启动mqtt客户端

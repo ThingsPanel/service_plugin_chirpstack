@@ -2,7 +2,7 @@
   {
     "dataKey": "server",
     "label": "服务地址",
-    "placeholder": "请输入服务地址，例如:104.156.140.42:8080",
+    "placeholder": "请输入服务地址，例如:104.156.140.42:8080,不需要http|https",
     "type": "input",
     "validate": {
       "message": "不能为空",

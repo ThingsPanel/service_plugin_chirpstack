@@ -141,7 +141,7 @@ func OnGetDeviceList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	offset := (limit - 1) * pageS
-	total, list, err := apis.NewClient(voucher.Server, voucher.ApiToken).GetDeviceList(context.Background(), voucher.ApplicationId, uint32(limit), uint32(offset))
+	total, list, err := apis.NewClient(voucher.Server, voucher.ApiToken, voucher.ApplicationId).GetDeviceList(context.Background(), uint32(limit), uint32(offset))
 	if err != nil {
 		RspError(w, err)
 		return

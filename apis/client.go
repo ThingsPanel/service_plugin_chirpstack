@@ -30,45 +30,50 @@ func (a APIToken) RequireTransportSecurity() bool {
 }
 
 type ChirpStackClient struct {
-	client api.DeviceServiceClient
+	server        string
+	apiToken      APIToken
+	applicationId string
 }
 
-func NewClient(server, apiToken string) *ChirpStackClient {
-	logrus.Info(server, apiToken)
-	dialOpts := []grpc.DialOption{
-		grpc.WithBlock(),
-		grpc.WithPerRPCCredentials(APIToken(apiToken)),
-		grpc.WithInsecure(), // remove this when using TLS
-	}
-
-	// connect to the gRPC server
-	conn, err := grpc.Dial(server, dialOpts...)
-	if err != nil {
-		panic(err)
-	}
-	logrus.Info(conn)
-	// define the DeviceService client
+func NewClient(server, apiToken, applicationId string) *ChirpStackClient {
 	return &ChirpStackClient{
-		client: api.NewDeviceServiceClient(conn),
+		server:        server,
+		apiToken:      APIToken(apiToken),
+		applicationId: applicationId,
 	}
 }
 
-func (c *ChirpStackClient) GetDeviceList(ctx context.Context, applicationId string, limit, offset uint32) (int, []model.DeviceItem, error) {
+func (c *ChirpStackClient) GetDeviceList(ctx context.Context, limit, offset uint32) (int, []model.DeviceItem, error) {
 	var (
 		total int
 		list  []model.DeviceItem
 	)
-	logrus.Info("applicationId", applicationId, limit, offset)
-	resp, err := c.client.List(context.Background(), &api.ListDevicesRequest{
+	dialOpts := []grpc.DialOption{
+		grpc.WithBlock(),
+		grpc.WithPerRPCCredentials(c.apiToken),
+		grpc.WithInsecure(), // remove this when using TLS
+	}
+	// connect to the gRPC server
+	conn, err := grpc.Dial(c.server, dialOpts...)
+	if err != nil {
+		panic(err)
+	}
+	defer func(conn *grpc.ClientConn) {
+		_ = conn.Close()
+	}(conn)
+	client := api.NewDeviceServiceClient(conn)
+	logrus.Info("applicationId", c.applicationId, limit, offset)
+	resp, err := client.List(context.Background(), &api.ListDevicesRequest{
 		Limit:         limit,
 		Offset:        offset,
-		ApplicationId: applicationId,
+		ApplicationId: c.applicationId,
 	})
-	logrus.Error(resp)
+
 	if err != nil {
 		return total, list, err
 	}
 	total = int(resp.TotalCount)
+
 	for _, v := range resp.Result {
 		list = append(list, model.DeviceItem{
 			DeviceNumber: v.DevEui,
@@ -76,5 +81,6 @@ func (c *ChirpStackClient) GetDeviceList(ctx context.Context, applicationId stri
 			Description:  v.DeviceProfileName,
 		})
 	}
+	logrus.Error("数据:", list)
 	return total, list, nil
 }
