@@ -38,7 +38,7 @@ func (ctw *CtwingService) telemetry(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	logrus.Debug("Raw Body:", string(body))
-
+	return
 	decoder := json.NewDecoder(r.Body)
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
