@@ -8,11 +8,15 @@ import (
 	tpprotocolsdkgo "github.com/ThingsPanel/tp-protocol-sdk-go"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"golang.org/x/net/context"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"plugin_chirpstack/apis"
 	httpclient "plugin_chirpstack/http_client"
+	"plugin_chirpstack/model"
+	"strconv"
 )
 
 var HttpClient *tpprotocolsdkgo.Client
@@ -107,9 +111,10 @@ func OnGetDeviceList(w http.ResponseWriter, r *http.Request) {
 	//r.ParseForm() //解析参数，默认是不会解析的
 	logrus.Info("【收到api请求】path", r.URL.Path)
 	logrus.Info("query", r.FormValue("voucher"))
-	var voucher CwtingVoucher
+	var voucher model.ChirpStackForm
 	err := json.Unmarshal([]byte(r.FormValue("voucher")), &voucher)
 	if err != nil {
+		RspError(w, err)
 		return
 	}
 	page := r.FormValue("page")
@@ -121,7 +126,28 @@ func OnGetDeviceList(w http.ResponseWriter, r *http.Request) {
 	if pageSize == "" || pageSize == "0" {
 		pageSize = "10"
 	}
-
+	var (
+		limit uint64
+		pageS uint64
+	)
+	limit, err = strconv.ParseUint(page, 10, 32)
+	if err != nil {
+		RspError(w, err)
+		return
+	}
+	pageS, err = strconv.ParseUint(pageSize, 10, 32)
+	if err != nil {
+		RspError(w, err)
+		return
+	}
+	offset := (limit - 1) * pageS
+	total, list, err := apis.NewClient(voucher.Server, voucher.ApiToken).GetDeviceList(context.Background(), voucher.ApplicationId, uint32(limit), uint32(offset))
+	if err != nil {
+		RspError(w, err)
+		return
+	}
+	data["total"] = total
+	data["list"] = list
 	// 获取设备列表
 	RspSuccess(w, data)
 }

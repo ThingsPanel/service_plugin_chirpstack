@@ -26,7 +26,7 @@ func main() {
 	httpclient.Init()
 	// 启动服务
 	//go services.Start()
-	go services.StartHttp(services.NewCtwing().Init())
+	go services.StartHttp(services.NewChirpStack().Init())
 
 	// 启动http服务
 	httpservice.Init()

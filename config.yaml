@@ -29,5 +29,5 @@ redis:
   db: 10 # 默认0
   password: redis
 
-ctwing:
+chirp_stack:
   device_number_key: "%s-%s"
