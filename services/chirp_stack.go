@@ -45,12 +45,9 @@ func (ctw *ChirpStackService) telemetry(w http.ResponseWriter, r *http.Request) 
 	deviceNumber := fmt.Sprintf(viper.GetString("chirp_stack.device_number_key"), msg.DeviceInfo.ApplicationId, msg.DeviceInfo.DevEui)
 	// 读取设备信息
 	deviceInfo, err := httpclient.GetDeviceConfig(deviceNumber)
-	if err != nil {
+	if err != nil || deviceInfo.Code != 200 {
 		// 获取设备信息失败，请检查连接包是否正确
 		logrus.Error(err)
-		return
-	}
-	if deviceInfo.Code != 200 {
 		return
 	}
 	logrus.Debug("deviceInfo:", deviceInfo)
