@@ -50,6 +50,9 @@ func (ctw *ChirpStackService) telemetry(w http.ResponseWriter, r *http.Request) 
 		logrus.Error(err)
 		return
 	}
+	if deviceInfo.Code != 200 {
+		return
+	}
 	logrus.Debug("deviceInfo:", deviceInfo)
 	payload, err := base64.StdEncoding.DecodeString(msg.Data)
 	if err != nil {

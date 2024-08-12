@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/chirpstack/chirpstack/api/go/v4/api"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"plugin_chirpstack/model"
 )
@@ -74,7 +75,7 @@ func (c *ChirpStackClient) GetDeviceList(ctx context.Context, limit, offset uint
 	total = int(resp.TotalCount)
 	for _, v := range resp.Result {
 		list = append(list, model.DeviceItem{
-			DeviceNumber: v.DevEui,
+			DeviceNumber: fmt.Sprintf(viper.GetString("chirp_stack.device_number_key"), c.applicationId, v.DevEui),
 			DeviceName:   v.Name,
 			Description:  v.DeviceProfileName,
 		})
