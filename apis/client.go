@@ -57,6 +57,7 @@ func (c *ChirpStackClient) GetDeviceList(ctx context.Context, applicationId stri
 		total int
 		list  []model.DeviceItem
 	)
+	logrus.Info("applicationId", applicationId, limit, offset)
 	resp, err := c.client.List(context.Background(), &api.ListDevicesRequest{
 		Limit:         limit,
 		Offset:        offset,
