@@ -30,4 +30,4 @@ redis:
   password: redis
 
 chirp_stack:
-  device_number_key: "%s-%s"
+  device_number_key: "ChirpStack-%s"

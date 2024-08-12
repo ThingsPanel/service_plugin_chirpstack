@@ -42,7 +42,8 @@ func (ctw *ChirpStackService) telemetry(w http.ResponseWriter, r *http.Request) 
 	if msg.Data == "" {
 		return
 	}
-	deviceNumber := fmt.Sprintf(viper.GetString("chirp_stack.device_number_key"), msg.DeviceInfo.ApplicationId, msg.DeviceInfo.DevEui)
+	deviceNumber := fmt.Sprintf(viper.GetString("chirp_stack.device_number_key"), msg.DeviceInfo.DevEui)
+	//deviceNumber := msg.DeviceInfo.DevEui
 	// 读取设备信息
 	deviceInfo, err := httpclient.GetDeviceConfig(deviceNumber)
 	if err != nil || deviceInfo.Code != 200 {

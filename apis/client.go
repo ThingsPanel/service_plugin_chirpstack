@@ -75,9 +75,10 @@ func (c *ChirpStackClient) GetDeviceList(ctx context.Context, limit, offset uint
 	total = int(resp.TotalCount)
 	for _, v := range resp.Result {
 		list = append(list, model.DeviceItem{
-			DeviceNumber: fmt.Sprintf(viper.GetString("chirp_stack.device_number_key"), c.applicationId, v.DevEui),
-			DeviceName:   v.Name,
-			Description:  v.DeviceProfileName,
+			DeviceNumber: fmt.Sprintf(viper.GetString("chirp_stack.device_number_key"), v.DevEui),
+			//DeviceNumber: v.DevEui,
+			DeviceName:  v.Name,
+			Description: v.DeviceProfileName,
 		})
 	}
 	logrus.Error("数据:", list)
