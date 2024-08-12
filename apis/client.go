@@ -68,12 +68,10 @@ func (c *ChirpStackClient) GetDeviceList(ctx context.Context, limit, offset uint
 		Offset:        offset,
 		ApplicationId: c.applicationId,
 	})
-
 	if err != nil {
 		return total, list, err
 	}
 	total = int(resp.TotalCount)
-
 	for _, v := range resp.Result {
 		list = append(list, model.DeviceItem{
 			DeviceNumber: v.DevEui,
