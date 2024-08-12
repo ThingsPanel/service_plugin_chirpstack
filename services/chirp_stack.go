@@ -50,6 +50,7 @@ func (ctw *ChirpStackService) telemetry(w http.ResponseWriter, r *http.Request) 
 		logrus.Error(err)
 		return
 	}
+	logrus.Debug("deviceInfo:", deviceInfo)
 	payload, err := base64.StdEncoding.DecodeString(msg.Data)
 	if err != nil {
 		//base64解密失败
@@ -63,6 +64,7 @@ func (ctw *ChirpStackService) telemetry(w http.ResponseWriter, r *http.Request) 
 		logrus.Error(err)
 		return
 	}
+	logrus.Debug("telemetry:", telemetry)
 	err = mqtt.PublishTelemetry(deviceInfo.Data.ID, telemetry)
 	if err != nil {
 		logrus.Error(err)
