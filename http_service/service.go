@@ -130,17 +130,17 @@ func OnGetDeviceList(w http.ResponseWriter, r *http.Request) {
 		limit uint64
 		pageS uint64
 	)
-	limit, err = strconv.ParseUint(page, 10, 32)
+	limit, err = strconv.ParseUint(pageSize, 10, 32)
 	if err != nil {
 		RspError(w, err)
 		return
 	}
-	pageS, err = strconv.ParseUint(pageSize, 10, 32)
+	pageS, err = strconv.ParseUint(page, 10, 32)
 	if err != nil {
 		RspError(w, err)
 		return
 	}
-	offset := (limit - 1) * pageS
+	offset := (pageS - 1) * limit
 	total, list, err := apis.NewClient(voucher.Server, voucher.ApiToken, voucher.ApplicationId).GetDeviceList(context.Background(), uint32(limit), uint32(offset))
 	if err != nil {
 		RspError(w, err)
