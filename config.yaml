@@ -1,5 +1,5 @@
 server:
-  address: 0.0.0.0:8380 #服务地址
+  address: 0.0.0.0:8480 #服务地址
   identifier: CTWING # 服务唯一标识符注册插件时候的服务标识符字段
 
 mqtt:
@@ -15,7 +15,7 @@ mqtt:
   qos: 0 #qos
 
 http_server:
-  address: 0.0.0.0:8381 #http服务地址
+  address: 0.0.0.0:8481 #http服务地址
 
 thingspanel:
   address: http://127.0.0.1:9999 #thingspanel服务地址
