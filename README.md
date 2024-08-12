@@ -1,0 +1,3 @@
+# 与LoRaWAN开源的ChirpStack平台对接
+
+用户通过输入产品id添加设备获取设备属性
