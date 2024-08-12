@@ -34,6 +34,7 @@ type ChirpStackClient struct {
 }
 
 func NewClient(server, apiToken string) *ChirpStackClient {
+	logrus.Info(server, apiToken)
 	dialOpts := []grpc.DialOption{
 		grpc.WithBlock(),
 		grpc.WithPerRPCCredentials(APIToken(apiToken)),
@@ -45,11 +46,11 @@ func NewClient(server, apiToken string) *ChirpStackClient {
 	if err != nil {
 		panic(err)
 	}
+	logrus.Info(conn)
 	// define the DeviceService client
 	return &ChirpStackClient{
 		client: api.NewDeviceServiceClient(conn),
 	}
-
 }
 
 func (c *ChirpStackClient) GetDeviceList(ctx context.Context, applicationId string, limit, offset uint32) (int, []model.DeviceItem, error) {
