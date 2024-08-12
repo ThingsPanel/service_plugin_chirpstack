@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/chirpstack/chirpstack/api/go/v4/api"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"plugin_chirpstack/model"
 )
@@ -59,9 +60,9 @@ func (c *ChirpStackClient) GetDeviceList(ctx context.Context, applicationId stri
 	resp, err := c.client.List(context.Background(), &api.ListDevicesRequest{
 		Limit:         limit,
 		Offset:        offset,
-		ApplicationId: "acf5e750-8d24-490f-80ad-c6e9e1b5a7eb",
+		ApplicationId: applicationId,
 	})
-
+	logrus.Error(resp)
 	if err != nil {
 		return total, list, err
 	}
